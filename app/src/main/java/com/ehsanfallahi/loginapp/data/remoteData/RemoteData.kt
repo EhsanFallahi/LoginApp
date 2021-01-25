@@ -13,7 +13,7 @@ class RemoteData@Inject
 constructor(private val apiService:ApiService) {
 
     private val _getAllUsers= MutableLiveData<UsersLoginResponse>()
-    val getAllNews: LiveData<UsersLoginResponse>
+    val getAllUser: LiveData<UsersLoginResponse>
         get() = _getAllUsers
 
     suspend fun getAllNews(){
