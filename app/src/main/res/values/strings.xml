@@ -4,4 +4,9 @@
     <string name="title_hint_email">Email</string>
     <string name="title_hint_password">Password</string>
     <string name="title_iran_web_yar">IRAN Web Yar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_intro1">پیشرو در پیاده سازی تکنولوژی های روز</string>
+    <string name="text_intro2">اولین و قویترین مرکز تخصصی وب با پایتون و جنگو در ایران</string>
+    <string name="text_intro3">برنامه نویسی با زبان های روز دنیا</string>
 </resources>

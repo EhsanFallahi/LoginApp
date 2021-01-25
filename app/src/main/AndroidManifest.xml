@@ -3,7 +3,7 @@
     package="com.ehsanfallahi.loginapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".di.MyApplication"
@@ -13,9 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginApp">
-        <activity android:name=".ui.MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            ></activity>
+        <activity android:name=".ui.intro.IntroSliderActivity"></activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
