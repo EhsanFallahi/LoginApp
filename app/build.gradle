@@ -111,6 +111,9 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
     kapt "androidx.hilt:hilt-compiler:1.0.0-alpha02"
 
+    //lottieAnimation
+    implementation "com.airbnb.android:lottie:3.4.0"
+
 
 
 }
