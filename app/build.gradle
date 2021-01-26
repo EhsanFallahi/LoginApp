@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs'
     id 'kotlin-android-extensions'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -116,6 +117,17 @@ dependencies {
 
     //viewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    // Preferences DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha04"
+    implementation "androidx.legacy:legacy-preference-v14:1.0.0"
+    implementation "androidx.preference:preference:1.0.0"
+
+    //fcm
+    implementation 'com.google.firebase:firebase-core:18.0.1'
+    implementation 'com.google.firebase:firebase-iid:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'android.arch.work:work-runtime:1.0.1'
 
 
 
