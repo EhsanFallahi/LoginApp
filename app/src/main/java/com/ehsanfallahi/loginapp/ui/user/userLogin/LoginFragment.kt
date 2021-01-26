@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.ehsanfallahi.loginapp.R
 import com.ehsanfallahi.loginapp.data.UserPreferences
 import com.ehsanfallahi.loginapp.data.service.ApiService
@@ -74,10 +75,11 @@ class LoginFragment : ScopedFragment() {
         })
 
         binding.loginButton.setOnClickListener{
-            loginUser(
-                binding.emailLogin.text.toString().trim(),
-                binding.passwordLogin.text.toString().trim()
-            )
+//            loginUser(
+//                binding.emailLogin.text.toString().trim(),
+//                binding.passwordLogin.text.toString().trim()
+//            )
+            it.findNavController().navigate(R.id.action_loginFragment_to_userListFragment)
         }
 
        bindUI()

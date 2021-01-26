@@ -20,4 +20,6 @@
     <string name="fcm_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_notification_channel_name" translatable="true">LoginApp</string>
     <string name="notification_channel_id" translatable="false">test_channel</string>
+    <string name="title_tv_email">ایمیل:</string>
+    <string name="title_tv_name">نام:</string>
 </resources>

@@ -27,5 +27,9 @@
         android:id="@+id/userDetailFragment"
         android:name="com.ehsanfallahi.loginapp.ui.user.userDetail.UserDetailFragment"
         android:label="user_detail_fragment"
-        tools:layout="@layout/user_detail_fragment" />
+        tools:layout="@layout/user_detail_fragment" >
+        <argument
+            android:name="data"
+            app:argType="com.ehsanfallahi.loginapp.data.dataModel.Data" />
+    </fragment>
 </navigation>
