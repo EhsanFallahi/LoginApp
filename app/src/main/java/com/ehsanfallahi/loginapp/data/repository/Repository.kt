@@ -1,20 +1,16 @@
 package com.ehsanfallahi.loginapp.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.ehsanfallahi.loginapp.data.dataModel.UsersLoginResponse
 import com.ehsanfallahi.loginapp.data.database.UsersLoginDao
 import com.ehsanfallahi.loginapp.data.remoteData.RemoteData
-import com.ehsanfallahi.loginapp.util.Constant
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.ehsanfallahi.loginapp.data.remoteData.request.AuthLoginRequest
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class Repository @Inject constructor(
     private val remoteData: RemoteData,
-    private val usersLoginDao: UsersLoginDao
+    private val usersLoginDao: UsersLoginDao,
 ) {
     init {
         remoteData.getAllUser.observeForever{ usersDownloaded->saveUsersToDb(usersDownloaded)}
@@ -48,4 +44,7 @@ class Repository @Inject constructor(
     private fun isFetchUser():Boolean{
         return true
     }
+
+    suspend fun login(authLoginRequest: AuthLoginRequest)=remoteData.login(authLoginRequest)
+
 }

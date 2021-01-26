@@ -1,7 +1,6 @@
 package com.ehsanfallahi.loginapp.di.module
 
 import android.content.Context
-import androidx.datastore.preferences.protobuf.Api
 import com.ehsanfallahi.loginapp.data.database.UsersDatabase
 import com.ehsanfallahi.loginapp.data.database.UsersLoginDao
 import com.ehsanfallahi.loginapp.data.remoteData.RemoteData
@@ -17,9 +16,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton

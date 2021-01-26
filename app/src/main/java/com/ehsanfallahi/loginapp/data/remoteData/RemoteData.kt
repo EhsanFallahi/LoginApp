@@ -1,9 +1,11 @@
 package com.ehsanfallahi.loginapp.data.remoteData
 
+import android.provider.ContactsContract
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ehsanfallahi.loginapp.data.dataModel.UsersLoginResponse
+import com.ehsanfallahi.loginapp.data.remoteData.request.AuthLoginRequest
 import com.ehsanfallahi.loginapp.data.service.ApiService
 import com.ehsanfallahi.loginapp.util.Constant.Companion.MY_TAG
 import com.ehsanfallahi.loginapp.util.NoConnectivityException
@@ -25,4 +27,7 @@ constructor(private val apiService:ApiService) {
         }
     }
 
+    suspend fun login(
+        authLoginRequest: AuthLoginRequest
+    )=apiService.login(authLoginRequest)
 }
