@@ -23,13 +23,11 @@ class MainActivity : AppCompatActivity() {
         val userPreferences=UserPreferences(this)
         userPreferences.fetchToke.asLiveData().observe(this, Observer {
             if(it==null)return@Observer
-            Toast.makeText(this,it?:"token is null",Toast.LENGTH_LONG).show()
+                Toast.makeText(this," خوش آمدید!$it",Toast.LENGTH_LONG).show()
+
         })
 
         navController = Navigation.findNavController(this,R.id.nav_host_fragment)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController,null)
-    }
 }

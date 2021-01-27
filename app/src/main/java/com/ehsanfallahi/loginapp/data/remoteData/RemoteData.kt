@@ -4,6 +4,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ehsanfallahi.loginapp.data.dataModel.Data
 import com.ehsanfallahi.loginapp.data.dataModel.UsersLoginResponse
 import com.ehsanfallahi.loginapp.data.remoteData.request.AuthLoginRequest
 import com.ehsanfallahi.loginapp.data.service.ApiService
@@ -18,7 +19,11 @@ constructor(private val apiService:ApiService) {
     val getAllUser: LiveData<UsersLoginResponse>
         get() = _getAllUsers
 
-    suspend fun getAllNews(){
+    private val _getUser= MutableLiveData<Data>()
+    val getUser: LiveData<Data>
+        get() = _getUser
+
+    suspend fun getAllUser(){
         try{
             val response=apiService.getAllUsers().await()
             _getAllUsers.postValue(response)
@@ -26,6 +31,16 @@ constructor(private val apiService:ApiService) {
             Log.e(MY_TAG,"No internet connection:${e.message}")
         }
     }
+
+    suspend fun getOneUser(id:Int):Data{
+        try{
+           return apiService.getUser(id).await()
+        }catch (e: NoConnectivityException){
+            Log.e(MY_TAG,"No internet connection:${e.message}")
+            return getUser.value!!
+        }
+    }
+
 
     suspend fun login(
         authLoginRequest: AuthLoginRequest

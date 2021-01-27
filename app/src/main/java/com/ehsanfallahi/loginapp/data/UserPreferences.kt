@@ -20,11 +20,18 @@ class UserPreferences @Inject constructor(context: Context){
     }
 
 
-    suspend fun saveAuthToken(email:String){
+    suspend fun saveEmailUser(email:String){
         dataStore.edit {
             it[KEY_AUTH]=email
         }
     }
+
+    suspend fun clearPref(){
+        dataStore.edit {
+            it.clear()
+        }
+    }
+
 
     companion object{
         private val KEY_AUTH= stringPreferencesKey("key_auth")

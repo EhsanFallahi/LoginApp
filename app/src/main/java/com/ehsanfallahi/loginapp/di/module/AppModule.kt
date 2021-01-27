@@ -1,6 +1,7 @@
 package com.ehsanfallahi.loginapp.di.module
 
 import android.content.Context
+import com.ehsanfallahi.loginapp.data.UserPreferences
 import com.ehsanfallahi.loginapp.data.database.UsersDatabase
 import com.ehsanfallahi.loginapp.data.database.UsersLoginDao
 import com.ehsanfallahi.loginapp.data.remoteData.RemoteData
@@ -63,7 +64,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRepository(remoteData: RemoteData, usersLoginDao: UsersLoginDao)
-    =Repository(remoteData,usersLoginDao)
+    fun provideUserPreferences(@ApplicationContext appContext: Context) = UserPreferences(appContext)
+
+    @Singleton
+    @Provides
+    fun provideRepository(remoteData: RemoteData, usersLoginDao: UsersLoginDao,preferences: UserPreferences)
+    =Repository(remoteData,usersLoginDao,preferences)
 
 }

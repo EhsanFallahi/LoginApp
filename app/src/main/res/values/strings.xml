@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">LoginApp</string>
     <string name="title_sign_in">Sing In</string>
-    <string name="title_hint_email">Email</string>
-    <string name="title_hint_password">Password</string>
+    <string name="title_hint_email">ایمیل</string>
+    <string name="title_hint_password">رمز ورود</string>
     <string name="title_iran_web_yar">IRAN Web Yar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -22,4 +22,7 @@
     <string name="notification_channel_id" translatable="false">test_channel</string>
     <string name="title_tv_email">ایمیل:</string>
     <string name="title_tv_name">نام:</string>
+    <string name="title_intro_next">بعدی</string>
+    <string name="title_intro_skip">بیخیال</string>
+    <string name="tilte_welcome">خوش آمدید</string>
 </resources>

@@ -63,10 +63,10 @@ class IntroSliderActivity : AppCompatActivity() {
 
                 if (position < fragmentList.lastIndex) {
                     tvSkip.visibility = View.VISIBLE
-                    tvNext.text = "Next"
+                    tvNext.text = "بعدی"
                 } else {
                     tvSkip.visibility = View.GONE
-                    tvNext.text = "Get Started"
+                    tvNext.text = "شروع برنامه"
                 }
             }
         })

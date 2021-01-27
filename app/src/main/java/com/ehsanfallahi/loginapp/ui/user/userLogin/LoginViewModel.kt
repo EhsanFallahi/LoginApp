@@ -1,6 +1,7 @@
 package com.ehsanfallahi.loginapp.ui.user.userLogin
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import com.ehsanfallahi.loginapp.R
 import com.ehsanfallahi.loginapp.data.remoteData.request.AuthLoginRequest
 import com.ehsanfallahi.loginapp.data.remoteData.request.AuthToken
 import com.ehsanfallahi.loginapp.data.repository.Repository
+import com.ehsanfallahi.loginapp.util.Constant.Companion.MY_TAG
 import com.ehsanfallahi.loginapp.util.lazyDeferred
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -24,15 +26,9 @@ constructor(
     val loginResult: LiveData<AuthToken>
         get() = _loginResult
 
-    private val _errorMsg = MutableLiveData<String>()
-    val errorMsg: LiveData<String>
-        get() = _errorMsg
+     val _errorMsg = MutableLiveData<String>()
 
-
-
-    val getAllUsers by lazyDeferred {
-        repository.getUsers()
-    }
+     val isValid = MutableLiveData<Boolean>()
 
     fun isValidForLogin(loginEmail: String?, loginPassword: String?): Boolean {
         if (loginEmail.isNullOrEmpty()
@@ -58,9 +54,25 @@ constructor(
 
     fun login(email: String, password: String)=
         viewModelScope.launch {
-            _loginResult.value= repository.login(AuthLoginRequest(email = email,password=password))
+            try {
+                _loginResult.value= repository.login(AuthLoginRequest(email = email,password=password))
+                isValid.value=true
+            }catch (e:Exception){
+                Log.i(MY_TAG,"input is wrong")
+                postErrorValue("متاسفانه چنین داده ای موجود نمی\u200Cباشد!")
+                isValid.value=false
+            }
+
         }
 
+    fun saveEmailUser(email: String)=viewModelScope.launch {
+        repository.saveEmailUser(email)
+    }
+
+
+    override fun onCleared() {
+        postErrorValue("")
+    }
 
 
 }

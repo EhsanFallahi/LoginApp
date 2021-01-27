@@ -1,5 +1,8 @@
 package com.ehsanfallahi.loginapp.util
 
+
+import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
 fun<T>lazyDeferred(block:suspend CoroutineScope.()->T):Lazy<Deferred<T>>{
@@ -9,3 +12,10 @@ fun<T>lazyDeferred(block:suspend CoroutineScope.()->T):Lazy<Deferred<T>>{
         }
     }
 }
+
+fun View.snackBar(message:String){
+    val snackBar=Snackbar.make(this,message,Snackbar.LENGTH_LONG).show()
+}
+
+
+

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.ehsanfallahi.loginapp.data.dataModel.Data
 import com.ehsanfallahi.loginapp.data.dataModel.UsersLoginResponse
 
 @Dao
@@ -15,4 +16,5 @@ interface UsersLoginDao {
 
      @Insert(onConflict = OnConflictStrategy.REPLACE)
      suspend fun insertUsers(usersLoginResponse: UsersLoginResponse)
+
 }

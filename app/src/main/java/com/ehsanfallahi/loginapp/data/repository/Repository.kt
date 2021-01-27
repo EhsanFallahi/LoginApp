@@ -1,6 +1,8 @@
 package com.ehsanfallahi.loginapp.data.repository
 
 import androidx.lifecycle.LiveData
+import com.ehsanfallahi.loginapp.data.UserPreferences
+import com.ehsanfallahi.loginapp.data.dataModel.Data
 import com.ehsanfallahi.loginapp.data.dataModel.UsersLoginResponse
 import com.ehsanfallahi.loginapp.data.database.UsersLoginDao
 import com.ehsanfallahi.loginapp.data.remoteData.RemoteData
@@ -11,19 +13,22 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val remoteData: RemoteData,
     private val usersLoginDao: UsersLoginDao,
+    private val preferences: UserPreferences
 ) {
     init {
         remoteData.getAllUser.observeForever{ usersDownloaded->saveUsersToDb(usersDownloaded)}
 
     }
 
-    suspend fun getUsers(): LiveData<UsersLoginResponse> {
+    suspend fun getAllUsers(): LiveData<UsersLoginResponse> {
         return withContext(Dispatchers.IO){
             initUserData()
             return@withContext usersLoginDao.getAllUsers()
         }
 
     }
+
+    suspend fun getUser(id:Int)=remoteData.getOneUser(id)
 
     private fun saveUsersToDb(userDownloaded: UsersLoginResponse?) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -38,7 +43,7 @@ class Repository @Inject constructor(
     }
 
     private suspend fun fetchUser(){
-        remoteData.getAllNews()
+        remoteData.getAllUser()
     }
 
     private fun isFetchUser():Boolean{
@@ -46,5 +51,14 @@ class Repository @Inject constructor(
     }
 
     suspend fun login(authLoginRequest: AuthLoginRequest)=remoteData.login(authLoginRequest)
+
+    suspend fun saveEmailUser(email:String){
+        preferences.saveEmailUser(email)
+    }
+
+    suspend fun clearPrefereces(){
+        preferences.clearPref()
+    }
+
 
 }

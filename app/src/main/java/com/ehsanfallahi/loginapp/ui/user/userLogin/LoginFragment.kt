@@ -2,31 +2,31 @@ package com.ehsanfallahi.loginapp.ui.user.userLogin
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.ehsanfallahi.loginapp.R
 import com.ehsanfallahi.loginapp.data.UserPreferences
-import com.ehsanfallahi.loginapp.data.service.ApiService
 import com.ehsanfallahi.loginapp.databinding.LoginFragmentBinding
 import com.ehsanfallahi.loginapp.util.Constant.Companion.MY_TAG
 import com.ehsanfallahi.loginapp.util.ScopedFragment
+import com.ehsanfallahi.loginapp.util.snackBar
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.login_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -42,73 +42,84 @@ class LoginFragment : ScopedFragment() {
         binding=DataBindingUtil.inflate(inflater,R.layout.login_fragment,container,false)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         userPreferences= UserPreferences(requireContext())
+        binding.progressLogin.visibility=View.GONE
 
-        viewModel.loginResult.observe(viewLifecycleOwner, Observer {result->
-            if (result.error!=null){
-//                Toast.makeText(requireContext(),"result is null",Toast.LENGTH_SHORT).show()
-                Log.i(MY_TAG," result have error:${result.error}")
-                return@Observer
-            }else{
-                Log.i(MY_TAG," result is:$result")
+         userPreferences=UserPreferences(requireContext())
+         userPreferences.fetchToke.asLiveData().observe(viewLifecycleOwner, Observer {
+            if(it==null)return@Observer
+            val directions =
+                LoginFragmentDirections.actionLoginFragmentToUserListFragment(it)
+            findNavController().navigate(directions)
 
-                lifecycleScope.launch {
-                    if(!result.token.isNullOrEmpty()){
-                        userPreferences.saveAuthToken(binding.emailLogin.text.toString().trim())
-                        Toast.makeText(requireContext(),R.string.title_login_success,Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-
-            }
         })
 
-        viewModel.errorMsg.observe(viewLifecycleOwner, Observer { error->
-            if (error==null){
-//                Toast.makeText(requireContext(),"error = null",Toast.LENGTH_SHORT).show()
-                Log.i(MY_TAG," error = null")
-                return@Observer
-            }else{
-//                Toast.makeText(requireContext(),"error is :$error",Toast.LENGTH_SHORT).show()
-                Log.i(MY_TAG," error is :$error")
 
-            }
+        binding.emailLogin.addTextChangedListener(afterTextChangedListener)
+        binding.passwordLogin.addTextChangedListener(afterTextChangedListener)
+
+
+        viewModel._errorMsg.observe(viewLifecycleOwner, Observer { error->
+            if (error.isNullOrEmpty()) {return@Observer}
+            else{requireView().snackBar(error)
+            binding.progressLogin.visibility=View.GONE}
         })
 
         binding.loginButton.setOnClickListener{
-//            loginUser(
-//                binding.emailLogin.text.toString().trim(),
-//                binding.passwordLogin.text.toString().trim()
-//            )
-            it.findNavController().navigate(R.id.action_loginFragment_to_userListFragment)
+            binding.progressLogin.visibility=View.VISIBLE
+            loginUser(
+                binding.emailLogin.text.toString().trim(),
+                binding.passwordLogin.text.toString().trim()
+            )
         }
 
-       bindUI()
 
+        //for FCM Notification
         createChannel(getString(R.string.fcm_notification_channel_id),
             getString(R.string.fcm_notification_channel_name))
+
         subscribeTopic()
 
         return binding.root
     }
 
     private fun loginUser(email: String, password: String) {
-        Log.i(MY_TAG," fun loginUser")
         if (viewModel.isValidForLogin(email,password)){
-            Log.i(MY_TAG,"  if (viewModel.isValidForLogin(email,password))")
             viewModel.login(email,password)
+            viewModel.isValid.observe(viewLifecycleOwner, Observer { isValid->
+                if (isValid) {
+                    val directions =
+                        LoginFragmentDirections.actionLoginFragmentToUserListFragment(binding.emailLogin.text.toString())
+                    binding.progressLogin.visibility=View.GONE
+                    findNavController().navigate(directions)
+                    viewModel.saveEmailUser(binding.emailLogin.text.toString().trim())
+                    requireView().snackBar(resources.getString(R.string.title_login_success))
+                    viewModel.isValid.value=false
+                }
+            })
 
         }else{
             Log.i(MY_TAG," not  if (viewModel.isValidForLogin(email,password))")
         }
     }
 
-    private fun bindUI()=launch {
-        val users=viewModel.getAllUsers.await()
-        users.observe(viewLifecycleOwner, Observer {
-            Log.i(MY_TAG,"it=$it")
-            if (it==null)return@Observer
-            binding.loginText.text=it.toString()
-        })
+    private val afterTextChangedListener = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            // ignore
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            val emailInput: String = binding.emailLogin.text.toString().trim()
+            val passwordInput: String = binding.passwordLogin.text.toString().trim()
+
+            binding.loginButton.isEnabled = (emailInput.isNotBlank()
+                    && emailInput.isNotEmpty()
+                    && passwordInput.isNotBlank()
+                    && passwordInput.isNotEmpty())
+        }
+
+        override fun afterTextChanged(s: Editable) {
+            // ignore
+        }
     }
 
     private fun createChannel(channelId:String,channelName:String){
@@ -139,6 +150,17 @@ class LoginFragment : ScopedFragment() {
             }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.emailLogin.setText("")
+        binding.passwordLogin.setText("")
+    }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel._errorMsg.value=""
 
+        binding.emailLogin.setText("")
+        binding.passwordLogin.setText("")
+    }
 }
