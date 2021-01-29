@@ -8,7 +8,9 @@ Coroutines<br>
 Glide<br>
 Dependency Injection with Dagger2(Hilt)<br>
 Room Database(sqlite)<br>
-FCM:for remote notification
+FCM:for remote notification<br>
+Navigation Component<br>
+Data Binding
 
 
 
